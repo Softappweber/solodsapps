@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fffaf3">
+  <meta name="description" content="A simple calendar for Indian holidays.">
+  <title>Holiday Calendar India</title>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #fffaf3;
+      --surface: #ffffff;
+      --text: #29251f;
+      --muted: #81796e;
+      --line: #eee7dd;
+      --accent: #d96c3b;
+      --accent-light: #fff0e6;
+      --green: #527b62;
+      --shadow: 0 12px 36px rgba(70, 50, 26, .07);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button, input, select { font: inherit; }
+
+    button {
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      width: min(100%, 760px);
+      margin: 0 auto;
+      padding: 22px 18px calc(32px + env(safe-area-inset-bottom));
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 8px 0 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      background: var(--accent-light);
+      font-size: 23px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 21px;
+      letter-spacing: -.5px;
+    }
+
+    .subtitle {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .today-button, .nav-button, .filter-button, .save-button {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 12px;
+      min-height: 42px;
+      padding: 0 13px;
+    }
+
+    .today-button { color: var(--accent); font-weight: 650; }
+
+    .hero {
+      padding: 20px;
+      border-radius: 22px;
+      color: white;
+      background: linear-gradient(135deg, #d96c3b, #ed9a58);
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    .hero-label { font-size: 13px; opacity: .9; }
+    .hero-title { margin: 7px 0 4px; font-size: 23px; }
+    .hero-date { font-size: 14px; opacity: .92; }
+    .hero-empty { font-size: 16px; margin: 8px 0 2px; }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 17px;
+      box-shadow: var(--shadow);
+    }
+
+    .month-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .month-row h2 {
+      margin: 0;
+      font-size: 19px;
+      text-align: center;
+    }
+
+    .nav-button {
+      width: 42px;
+      padding: 0;
+      font-size: 21px;
+    }
+
+    .weekdays, .days {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      text-align: center;
+    }
+
+    .weekdays {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 650;
+      margin-bottom: 8px;
+    }
+
+    .day {
+      position: relative;
+      display: flex;
+      min-height: 48px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      border: 0;
+      border-radius: 13px;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+      margin: 2px 0;
+    }
+
+    .day.outside { color: #c7c0b7; }
+    .day.today { outline: 1px solid var(--accent); color: var(--accent); font-weight: 700; }
+    .day.selected { background: var(--accent-light); font-weight: 700; }
+    .day.has-holiday::after {
+      content: "";
+      width: 5px;
+      height: 5px;
+      position: absolute;
+      bottom: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 11px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 9px;
+      margin: 18px 0 13px;
+    }
+
+    .search {
+      flex: 1;
+      min-width: 0;
+      height: 44px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+      color: var(--text);
+      outline: none;
+    }
+
+    .search:focus { border-color: var(--accent); }
+    .filter-button.active { background: var(--accent-light); color: var(--accent); }
+
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 23px 2px 11px;
+    }
+
+    .section-heading h2 { margin: 0; font-size: 17px; }
+    .section-heading span { color: var(--muted); font-size: 12px; }
+
+    .holiday-list { display: grid; gap: 9px; }
+
+    .holiday-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 15px;
+    }
+
+    .date-box {
+      display: grid;
+      place-content: center;
+      flex: 0 0 50px;
+      height: 52px;
+      border-radius: 13px;
+      background: var(--accent-light);
+      color: var(--accent);
+      text-align: center;
+    }
+
+    .date-box strong { font-size: 18px; line-height: 1.1; }
+    .date-box span { font-size: 10px; font-weight: 700; text-transform: uppercase; }
+
+    .holiday-info { flex: 1; min-width: 0; }
+    .holiday-info h3 { margin: 0 0 4px; font-size: 14px; }
+    .holiday-info p { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .tag {
+      display: inline-block;
+      margin-top: 6px;
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .save-button {
+      min-width: 39px;
+      padding: 0;
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    .save-button.saved { color: var(--accent); background: var(--accent-light); }
+    .empty { padding: 24px 10px; text-align: center; color: var(--muted); font-size: 14px; }
+
+    .note {
+      margin: 17px 2px 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 380px) {
+      .app { padding-inline: 12px; }
+      .panel { padding: 13px; }
+      .day { min-height: 43px; }
+      .filter-button { padding-inline: 10px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <header>
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">🗓️</div>
+        <div>
+          <h1>Holiday Calendar</h1>
+          <p class="subtitle">India · Holidays at a glance</p>
+        </div>
+      </div>
+      <button class="today-button" id="todayButton" type="button">Today</button>
+    </header>
+
+    <section class="hero" aria-live="polite">
+      <div class="hero-label">UP NEXT</div>
+      <div id="nextHoliday"></div>
+    </section>
+
+    <section class="panel" aria-label="Calendar">
+      <div class="month-row">
+        <button class="nav-button" id="prevMonth" type="button" aria-label="Previous month">‹</button>
+        <h2 id="monthTitle"></h2>
+        <button class="nav-button" id="nextMonth" type="button" aria-label="Next month">›</button>
+      </div>
+      <div class="weekdays" aria-hidden="true">
+        <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+        <span>Thu</span><span>Fri</span><span>Sat</span>
+      </div>
+      <div class="days" id="calendarDays"></div>
+      <div class="legend"><span class="legend-dot"></span> Holiday</div>
+    </section>
+
+    <div class="toolbar">
+      <input class="search" id="searchInput" type="search" placeholder="Search holidays…" aria-label="Search holidays">
+      <button class="filter-button" id="savedFilter" type="button" aria-pressed="false">♡ Saved</button>
+    </div>
+
+    <div class="section-heading">
+      <h2 id="listTitle">Holidays this month</h2>
+      <span id="holidayCount"></span>
+    </div>
+    <section class="holiday-list" id="holidayList" aria-live="polite"></section>
+
+    <p class="note">
+      Holiday dates and observance can differ by state, organization, and local notification.
+      Confirm dates with an official local calendar before relying on them.
+    </p>
+  </main>
+
+  <script>
+    "use strict";
+
+    // Starter examples for 2026. Add verified state/territory entries as needed.
+    // Format: YYYY-MM-DD. Keep moon-sighting or locally variable dates clearly identified.
+    const HOLIDAYS = [
+      { date: "2026-01-26", name: "Republic Day", type: "National holiday" },
+      { date: "2026-03-04", name: "Holi", type: "Festival" },
+      { date: "2026-03-21", name: "Eid al-Fitr (Ramzan Id)", type: "Date may vary" },
+      { date: "2026-03-26", name: "Rama Navami", type: "Festival" },
+      { date: "2026-04-03", name: "Good Friday", type: "Public holiday" },
+      { date: "2026-05-01", name: "Buddha Purnima", type: "Festival" },
+      { date: "2026-08-15", name: "Independence Day", type: "National holiday" },
+      { date: "2026-10-02", name: "Gandhi Jayanti", type: "National holiday" },
+      { date: "2026-10-20", name: "Dussehra", type: "Festival" },
+      { date: "2026-11-08", name: "Diwali", type: "Festival" },
+      { date: "2026-11-24", name: "Guru Nanak Jayanti", type: "Festival" },
+      { date: "2026-12-25", name: "Christmas", type: "Public holiday" }
+    ];
+
+    const monthFormatter = new Intl.DateTimeFormat("en-IN", { month: "long", year: "numeric" });
+    const weekdayFormatter = new Intl.DateTimeFormat("en-IN", { weekday: "long" });
+    const fullDateFormatter = new Intl.DateTimeFormat("en-IN", {
+      day: "numeric", month: "long", year: "numeric"
+    });
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let viewMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    let selectedDate = dateKey(today);
+    let showSavedOnly = false;
+    let savedDates = loadSaved();
+
+    const monthTitle = document.getElementById("monthTitle");
+    const calendarDays = document.getElementById("calendarDays");
+    const holidayList = document.getElementById("holidayList");
+    const searchInput = document.getElementById("searchInput");
+
+    function dateKey(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function parseDate(key) {
+      const [year, month, day] = key.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    }
+
+    function loadSaved() {
+      try {
+        const value = JSON.parse(localStorage.getItem("holiday-calendar-saved") || "[]");
+        return new Set(Array.isArray(value) ? value : []);
+      } catch {
+        return new Set();
+      }
+    }
+
+    function saveSaved() {
+      try {
+        localStorage.setItem("holiday-calendar-saved", JSON.stringify([...savedDates]));
+      } catch {
+        // Calendar still works if storage is unavailable in the webview.
+      }
+    }
+
+    function holidaysOn(key) {
+      return HOLIDAYS.filter(item => item.date === key);
+    }
+
+    function renderCalendar() {
+      monthTitle.textContent = monthFormatter.format(viewMonth);
+      calendarDays.replaceChildren();
+
+      const first = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), 1);
+      const gridStart = new Date(first);
+      gridStart.setDate(first.getDate() - first.getDay());
+
+      for (let i = 0; i < 42; i++) {
+        const date = new Date(gridStart);
+        date.setDate(gridStart.getDate() + i);
+        const key = dateKey(date);
+        const dayHolidays = holidaysOn(key);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "day";
+        button.textContent = String(date.getDate());
+        button.setAttribute("aria-label", `${fullDateFormatter.format(date)}${dayHolidays.length ? ", holiday: " + dayHolidays.map(h => h.name).join(", ") : ""}`);
+
+        if (date.getMonth() !== viewMonth.getMonth()) button.classList.add("outside");
+        if (key === dateKey(today)) button.classList.add("today");
+        if (key === selectedDate) button.classList.add("selected");
+        if (dayHolidays.length) button.classList.add("has-holiday");
+
+        button.addEventListener("click", () => {
+          selectedDate = key;
+          if (date.getMonth() !== viewMonth.getMonth()) {
+            viewMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+          }
+          render();
+        });
+
+        calendarDays.append(button);
+      }
+    }
+
+    function renderNextHoliday() {
+      const upcoming = HOLIDAYS
+        .filter(item => parseDate(item.date) >= today)
+        .sort((a, b) => a.date.localeCompare(b.date))[0];
+
+      const target = document.getElementById("nextHoliday");
+      if (!upcoming) {
+        target.innerHTML = '<div class="hero-empty">No upcoming holidays in the sample list</div>';
+        return;
+      }
+
+      const date = parseDate(upcoming.date);
+      const daysAway = Math.round((date - today) / 86400000);
+      const countdown = daysAway === 0 ? "Today" : daysAway === 1 ? "Tomorrow" : `In ${daysAway} days`;
+
+      target.innerHTML = `
+        <h2 class="hero-title">${escapeHtml(upcoming.name)}</h2>
+        <div class="hero-date">${fullDateFormatter.format(date)} · ${countdown}</div>
+      `;
+    }
+
+    function renderList() {
+      const query = searchInput.value.trim().toLowerCase();
+      const selectedHolidays = holidaysOn(selectedDate);
+      let items;
+
+      if (query) {
+        items = HOLIDAYS.filter(item =>
+          `${item.name} ${item.type}`.toLowerCase().includes(query)
+        );
+        document.getElementById("listTitle").textContent = "Search results";
+      } else if (showSavedOnly) {
+        items = HOLIDAYS.filter(item => savedDates.has(item.date));
+        document.getElementById("listTitle").textContent = "Saved holidays";
+      } else if (selectedHolidays.length) {
+        items = selectedHolidays;
+        document.getElementById("listTitle").textContent =
+          `Holidays · ${fullDateFormatter.format(parseDate(selectedDate))}`;
+      } else {
+        items = HOLIDAYS.filter(item => {
+          const date = parseDate(item.date);
+          return date.getFullYear() === viewMonth.getFullYear() &&
+                 date.getMonth() === viewMonth.getMonth();
+        });
+        document.getElementById("listTitle").textContent = "Holidays this month";
+      }
+
+      items = [...items].sort((a, b) => a.date.localeCompare(b.date));
+      document.getElementById("holidayCount").textContent =
+        `${items.length} ${items.length === 1 ? "holiday" : "holidays"}`;
+
+      holidayList.replaceChildren();
+
+      if (!items.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = query
+          ? "No matching holidays found."
+          : showSavedOnly
+            ? "No saved holidays yet. Tap the heart on a holiday to save it."
+            : "No holidays listed for this date or month.";
+        holidayList.append(empty);
+        return;
+      }
+
+      for (const item of items) {
+        const date = parseDate(item.date);
+        const card = document.createElement("article");
+        card.className = "holiday-card";
+
+        const dateBox = document.createElement("div");
+        dateBox.className = "date-box";
+        dateBox.innerHTML = `<strong>${date.getDate()}</strong><span>${date.toLocaleDateString("en-IN", { month: "short" })}</span>`;
+
+        const info = document.createElement("div");
+        info.className = "holiday-info";
+        info.innerHTML = `
+          <h3>${escapeHtml(item.name)}</h3>
+          <p>${weekdayFormatter.format(date)} · ${date.getFullYear()}</p>
+          <span class="tag">${escapeHtml(item.type)}</span>
+        `;
+
+        const saveButton = document.createElement("button");
+        saveButton.type = "button";
+        saveButton.className = `save-button${savedDates.has(item.date) ? " saved" : ""}`;
+        saveButton.textContent = savedDates.has(item.date) ? "♥" : "♡";
+        saveButton.setAttribute("aria-label", savedDates.has(item.date) ? "Remove saved holiday" : "Save holiday");
+        saveButton.setAttribute("aria-pressed", String(savedDates.has(item.date)));
+        saveButton.addEventListener("click", () => {
+          if (savedDates.has(item.date)) savedDates.delete(item.date);
+          else savedDates.add(item.date);
+          saveSaved();
+          render();
+        });
+
+        card.append(dateBox, info, saveButton);
+        holidayList.append(card);
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[char]);
+    }
+
+    function render() {
+      renderCalendar();
+      renderNextHoliday();
+      renderList();
+    }
+
+    document.getElementById("prevMonth").addEventListener("click", () => {
+      viewMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() - 1, 1);
+      selectedDate = "";
+      render();
+    });
+
+    document.getElementById("nextMonth").addEventListener("click", () => {
+      viewMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 1);
+      selectedDate = "";
+      render();
+    });
+
+    document.getElementById("todayButton").addEventListener("click", () => {
+      viewMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      selectedDate = dateKey(today);
+      showSavedOnly = false;
+      document.getElementById("savedFilter").classList.remove("active");
+      document.getElementById("savedFilter").setAttribute("aria-pressed", "false");
+      render();
+    });
+
+    document.getElementById("savedFilter").addEventListener("click", event => {
+      showSavedOnly = !showSavedOnly;
+      event.currentTarget.classList.toggle("active", showSavedOnly);
+      event.currentTarget.setAttribute("aria-pressed", String(showSavedOnly));
+      renderList();
+    });
+
+    searchInput.addEventListener("input", () => {
+      showSavedOnly = false;
+      document.getElementById("savedFilter").classList.remove("active");
+      document.getElementById("savedFilter").setAttribute("aria-pressed", "false");
+      renderList();
+    });
+
+    render();
+  </script>
+</body>
+</html>
