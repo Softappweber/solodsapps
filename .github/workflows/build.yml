@@ -18,8 +18,19 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      # Use v4.0.4 — v4.0.0–v4.0.1 can fail on missing "tools" package
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v4
+        uses: android-actions/setup-android@v4.0.4
+
+      # Debug: show what actually got checked out
+      - name: Verify project structure
+        run: |
+          echo "--- Current directory ---"
+          pwd
+          echo "--- Top-level files ---"
+          ls -la
+          echo "--- Looking for android/gradlew ---"
+          ls -la android/gradlew || echo "ERROR: android/gradlew not found!"
 
       - name: Build debug APK
         run: |
