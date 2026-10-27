@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>soloDS-Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* --- 10 THEMES --- */
+  :root {
+    /* Default: Midnight Indigo */
+    --bg: #0f172a;
+    --surface: rgba(30, 41, 59, 0.7);
+    --primary: #6366f1;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: rgba(255, 255, 255, 0.1);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    --accent: #f59e0b;
+  }
+
+  [data-theme="saffron"] { --bg: #fff7ed; --surface: #ffffff; --primary: #ea580c; --text-main: #431407; --text-muted: #9a3412; --border: #ffedd5; --shadow: 0 10px 30px rgba(234, 88, 12, 0.15); }
+  [data-theme="forest"] { --bg: #f0fdf4; --surface: #ffffff; --primary: #16a34a; --text-main: #052e16; --text-muted: #166534; --border: #dcfce7; --shadow: 0 10px 30px rgba(22, 163, 74, 0.15); }
+  [data-theme="ocean"] { --bg: #f0f9ff; --surface: #ffffff; --primary: #0284c7; --text-main: #082f49; --text-muted: #0369a1; --border: #e0f2fe; --shadow: 0 10px 30px rgba(2, 132, 199, 0.15); }
+  [data-theme="rose"] { --bg: #fff1f2; --surface: #ffffff; --primary: #e11d48; --text-main: #4c0519; --text-muted: #be123c; --border: #ffe4e6; --shadow: 0 10px 30px rgba(225, 29, 72, 0.15); }
+  [data-theme="cyberpunk"] { --bg: #000000; --surface: #111111; --primary: #facc15; --text-main: #ffffff; --text-muted: #a1a1aa; --border: #27272a; --shadow: 0 0 20px rgba(250, 204, 21, 0.2); --accent: #06b6d4; }
+  [data-theme="gold"] { --bg: #18181b; --surface: #27272a; --primary: #eab308; --text-main: #fef08a; --text-muted: #a16207; --border: #3f3f46; --shadow: 0 10px 30px rgba(234, 179, 8, 0.1); }
+  [data-theme="lavender"] { --bg: #faf5ff; --surface: #ffffff; --primary: #9333ea; --text-main: #3b0764; --text-muted: #7e22ce; --border: #f3e8ff; --shadow: 0 10px 30px rgba(147, 51, 234, 0.15); }
+  [data-theme="slate"] { --bg: #f1f5f9; --surface: #ffffff; --primary: #334155; --text-main: #0f172a; --text-muted: #64748b; --border: #e2e8f0; --shadow: 0 10px 30px rgba(51, 65, 85, 0.1); }
+  [data-theme="crimson"] { --bg: #450a0a; --surface: rgba(69, 10, 10, 0.7); --primary: #ef4444; --text-main: #fef2f2; --text-muted: #fca5a5; --border: rgba(239, 68, 68, 0.2); --shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+  
+  body { background-color: var(--bg); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; transition: background 0.4s; }
+
+  /* --- HEADER --- */
+  .header { padding: 24px 20px 15px; display: flex; justify-content: space-between; align-items: center; }
+  .header-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; }
+  .theme-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text-main); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; box-shadow: var(--shadow); transition: 0.2s; }
+  .theme-btn:active { transform: scale(0.95); }
+
+  /* --- CALENDAR --- */
+  .calendar-wrap { flex: 1; overflow-y: auto; padding: 0 20px 100px; }
+  .cal-header { display: flex; justify-content: space-between; align-items: center; margin: 15px 0 20px; }
+  .cal-month { font-size: 1.2rem; font-weight: 700; }
+  .cal-nav { display: flex; gap: 10px; }
+  .cal-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: var(--text-main); display: flex; justify-content: center; align-items: center; font-weight: bold; cursor: pointer; box-shadow: var(--shadow); }
+  
+  .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; }
+  .weekdays div:first-child { color: #ef4444; } /* Sunday Red */
+  
+  .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .day { 
+    aspect-ratio: 1; 
+    display: flex; flex-direction: column; justify-content: center; align-items: center; 
+    border-radius: 14px; font-size: 1rem; font-weight: 600; 
+    position: relative; cursor: pointer; transition: all 0.2s;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .day.empty { visibility: hidden; }
+  .day.today { border: 2px solid var(--primary); color: var(--primary); }
+  .day.selected { background: var(--primary); color: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transform: scale(1.05); }
+  .day.holiday::after { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; position: absolute; bottom: 8px; }
+  .day.selected.holiday::after { background: #fff; }
+
+  /* --- INFO PANEL --- */
+  .info-panel { 
+    position: fixed; bottom: 0; left: 0; width: 100%; 
+    background: var(--surface); backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    border-radius: 30px 30px 0 0; padding: 25px 20px 40px;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+    transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+  }
+  .info-panel.active { transform: translateY(0); }
+  .info-drag { width: 40px; height: 5px; background: var(--text-muted); border-radius: 3px; margin: 0 auto 20px; opacity: 0.5; }
+  .info-date { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; color: var(--text-main); }
+  
+  .holiday-card { background: var(--bg); border-left: 4px solid var(--accent); padding: 15px; border-radius: 0 12px 12px 0; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+  .holiday-emoji { font-size: 1.8rem; }
+  .holiday-text h4 { font-size: 1rem; font-weight: 700; color: var(--text-main); }
+  .holiday-text p { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+  
+  .no-event { text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 20px 0; }
+</style>
+</head>
+<body data-theme="midnight">
+
+  <div class="header">
+    <div class="header-title">soloDS-Calendar</div>
+    <button class="theme-btn" onclick="cycleTheme()">🎨 Theme</button>
+  </div>
+
+  <div class="calendar-wrap">
+    <div class="cal-header">
+      <div class="cal-month" id="cal-month-year">Month Year</div>
+      <div class="cal-nav">
+        <div class="cal-btn" onclick="changeMonth(-1)">‹</div>
+        <div class="cal-btn" onclick="changeMonth(1)">›</div>
+      </div>
+    </div>
+    <div class="weekdays">
+      <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+    </div>
+    <div class="days-grid" id="days-grid"></div>
+  </div>
+
+  <!-- Bottom Sheet Info Panel -->
+  <div class="info-panel" id="infoPanel">
+    <div class="info-drag" onclick="closePanel()"></div>
+    <div class="info-date" id="info-date">Select a date</div>
+    <div id="info-content"></div>
+  </div>
+
+<script>
+  // --- HOLIDAY DATA ---
+  // Includes major Indian Festivals & National Holidays
+  const holidays = [
+    { date: '2026-01-01', title: 'New Year', type: 'Global', emoji: '🎆', desc: 'English New Year' },
+    { date: '2026-01-14', title: 'Makar Sankranti', type: 'Hindu', emoji: '🪁', desc: 'Harvest festival' },
+    { date: '2026-01-26', title: 'Republic Day', type: 'National', emoji: '🇮🇳', desc: 'Constitution of India' },
+    { date: '2026-03-03', title: 'Holi', type: 'Hindu', emoji: '🎨', desc: 'Festival of Colors' },
+    { date: '2026-03-21', title: 'Eid-ul-Fitr', type: 'Muslim', emoji: '🌙', desc: 'End of Ramadan' },
+    { date: '2026-04-14', title: 'Ambedkar Jayanti', type: 'National', emoji: '⚖️', desc: 'Birth of Dr. B.R. Ambedkar' },
+    { date: '2026-08-15', title: 'Independence Day', type: 'National', emoji: '🇮🇳', desc: 'Freedom from British rule' },
+    { date: '2026-08-28', title: 'Raksha Bandhan', type: 'Hindu', emoji: '🪢', desc: 'Bond of protection' },
+    { date: '2026-09-05', title: 'Krishna Janmashtami', type: 'Hindu', emoji: '🦚', desc: 'Birth of Lord Krishna' },
+    { date: '2026-10-02', title: 'Gandhi Jayanti', type: 'National', emoji: '👓', desc: 'Birth of Mahatma Gandhi' },
+    { date: '2026-10-20', title: 'Dussehra', type: 'Hindu', emoji: '🏹', desc: 'Victory of Lord Rama' },
+    { date: '2026-11-08', title: 'Diwali', type: 'Hindu', emoji: '🪔', desc: 'Festival of Lights' },
+    { date: '2026-11-10', title: 'Bhai Dooj', type: 'Hindu', emoji: '🤝', desc: 'Brother-Sister bond' },
+    { date: '2026-11-24', title: 'Guru Nanak Jayanti', type: 'Sikh', emoji: '🛕', desc: 'Birth of Guru Nanak' },
+    { date: '2026-12-25', title: 'Christmas', type: 'Christian', emoji: '🎄', desc: 'Birth of Jesus Christ' }
+  ];
+
+  // --- THEME ENGINE ---
+  const themes = ['midnight', 'saffron', 'forest', 'ocean', 'rose', 'cyberpunk', 'gold', 'lavender', 'slate', 'crimson'];
+  let currentThemeIndex = 0;
+
+  function cycleTheme() {
+    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+    document.body.setAttribute('data-theme', themes[currentThemeIndex]);
+  }
+
+  // --- CALENDAR ENGINE ---
+  const today = new Date();
+  let currentMonth = today.getMonth();
+  let currentYear = today.getFullYear();
+  let selectedDate = new Date(today);
+
+  function formatDateToStr(d) {
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    let year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
+  }
+
+  function renderCalendar() {
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    document.getElementById('cal-month-year').innerText = `${monthNames[currentMonth]} ${currentYear}`;
+    
+    const grid = document.getElementById('days-grid');
+    grid.innerHTML = '';
+    
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    
+    // Pad empty days
+    for (let i = 0; i < firstDay; i++) {
+      grid.innerHTML += `<div class="day empty"></div>`;
+    }
+    
+    // Render days
+    for (let i = 1; i <= daysInMonth; i++) {
+      let cellDate = new Date(currentYear, currentMonth, i);
+      let dateStr = formatDateToStr(cellDate);
+      
+      let classes = 'day';
+      if (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) classes += ' today';
+      if (i === selectedDate.getDate() && currentMonth === selectedDate.getMonth() && currentYear === selectedDate.getFullYear()) classes += ' selected';
+      
+      // Check for holiday
+      if (holidays.find(h => h.date === dateStr)) classes += ' holiday';
+      
+      grid.innerHTML += `<div class="${classes}" onclick="selectDay(${i}, '${dateStr}')">${i}</div>`;
+    }
+  }
+
+  function changeMonth(dir) {
+    currentMonth += dir;
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    renderCalendar();
+    closePanel();
+  }
+
+  function selectDay(dayNum, dateStr) {
+    selectedDate = new Date(currentYear, currentMonth, dayNum);
+    renderCalendar();
+    
+    // Show Panel
+    const panel = document.getElementById('infoPanel');
+    const dateDisplay = selectedDate.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    document.getElementById('info-date').innerText = dateDisplay;
+    
+    let holiday = holidays.find(h => h.date === dateStr);
+    let content = document.getElementById('info-content');
+    
+    if (holiday) {
+      content.innerHTML = `
+        <div class="holiday-card">
+          <div class="holiday-emoji">${holiday.emoji}</div>
+          <div class="holiday-text">
+            <h4>${holiday.title}</h4>
+            <p>${holiday.type} • ${holiday.desc}</p>
+          </div>
+        </div>
+      `;
+    } else {
+      content.innerHTML = `<div class="no-event">No major holidays on this day.</div>`;
+    }
+    
+    panel.classList.add('active');
+  }
+
+  function closePanel() {
+    document.getElementById('infoPanel').classList.remove('active');
+  }
+
+  // --- INIT ---
+  renderCalendar();
+  
+  // Auto-select today on open
+  setTimeout(() => {
+    selectDay(today.getDate(), formatDateToStr(today));
+    closePanel(); // Hide panel on startup so they see the calendar
+  }, 100);
+
+</script>
+</body>
+</html>
