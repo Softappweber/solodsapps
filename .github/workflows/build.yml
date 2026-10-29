@@ -21,12 +21,6 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v4.0.4
 
-      # Install Gradle 8.4 explicitly to match the project's wrapper
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: '8.4'
-
       - name: Build debug APK
         run: |
           cd android
