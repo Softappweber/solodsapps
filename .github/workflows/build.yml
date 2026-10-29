@@ -21,9 +21,17 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v4.0.4
 
+      # THIS IS THE FIX: This action creates the missing gradle-wrapper.jar automatically
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.4'
+
       - name: Build debug APK
         run: |
           cd android
+          # We generate the wrapper right here on the server, so it definitely exists
+          gradle wrapper --gradle-version 8.4
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
 
