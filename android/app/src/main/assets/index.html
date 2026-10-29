@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Marathi Dindarshika</title>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&family=Tiro+Devanagari+Marathi&display=swap" rel="stylesheet">
+<style>
+  /* --- 16 PREMIUM THEMES --- */
+  :root {
+    --bg: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+    --surface: #FFFFFF; --surface-rgb: 255, 255, 255;
+    --primary: #E65100; --text-main: #3E2723; --text-muted: #8D6E63;
+    --shadow: 0 8px 24px rgba(230, 81, 0, 0.1); --date-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  }
+
+  [data-theme="midnight"] { --bg: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); --surface: #1E293B; --surface-rgb: 30, 41, 59; --primary: #818CF8; --text-main: #F8FAFC; --text-muted: #94A3B8; --shadow: 0 8px 24px rgba(0,0,0,0.4); --date-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  [data-theme="forest"] { --bg: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); --surface: #FFFFFF; --surface-rgb: 255, 255, 255; --primary: #2E7D32; --text-main: #1B5E20; --text-muted: #558B2F; --shadow: 0 8px 24px rgba(46, 125, 50, 0.1); --date-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+  [data-theme="ocean"] { --bg: linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 100%); --surface: #FFFFFF; --surface-rgb: 255, 255, 255; --primary: #00838F; --text-main: #006064; --text-muted: #0097A7; --shadow: 0 8px 24px rgba(0, 131, 143, 0.1); --date-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+  [data-theme="rose"] { --bg: linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%); --surface: #FFFFFF; --surface-rgb: 255, 255, 255; --primary: #C2185B; --text-main: #880E4F; --text-muted: #D81B60; --shadow: 0 8px 24px rgba(194, 24, 91, 0.1); --date-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+  [data-theme="royal"] { --bg: linear-gradient(135deg, #311B92 0%, #4527A0 100%); --surface: #4527A0; --surface-rgb: 69, 39, 160; --primary: #B39DDB; --text-main: #EDE7F6; --text-muted: #B39DDB; --shadow: 0 8px 24px rgba(0,0,0,0.4); --date-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  [data-theme="flat-white"] { --bg: #F8F9FA; --surface: #FFFFFF; --surface-rgb: 255, 255, 255; --primary: #2196F3; --text-main: #212121; --text-muted: #757575; --shadow: 0 8px 24px rgba(0,0,0,0.06); --date-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+  [data-theme="flat-dark"] { --bg: #121212; --surface: #1E1E1E; --surface-rgb: 30, 30, 30; --primary: #BB86FC; --text-main: #FFFFFF; --text-muted: #AAAAAA; --shadow: 0 8px 24px rgba(0,0,0,0.5); --date-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  [data-theme="sunset"] { --bg: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%); --surface: rgba(255,255,255,0.85); --surface-rgb: 255, 255, 255; --primary: #D81B60; --text-main: #4A148C; --text-muted: #7B1FA2; --shadow: 0 8px 24px rgba(216, 27, 96, 0.15); --date-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+  [data-theme="cyber"] { --bg: #000000; --surface: #111111; --surface-rgb: 17, 17, 17; --primary: #00FFCC; --text-main: #FFFFFF; --text-muted: #00FFCC; --shadow: 0 0 20px rgba(0, 255, 204, 0.15); --date-shadow: 0 0 10px rgba(0, 255, 204, 0.05); }
+  [data-theme="gold"] { --bg: linear-gradient(135deg, #1A1A1A 0%, #000000 100%); --surface: #222222; --surface-rgb: 34, 34, 34; --primary: #FFD700; --text-main: #FFF8E1; --text-muted: #BCAAA4; --shadow: 0 8px 24px rgba(255, 215, 0, 0.1); --date-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  [data-theme="sky"] { --bg: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); --surface: #FFFFFF; --surface-rgb: 255, 255, 255; --primary: #1976D2; --text-main: #0D47A1; --text-muted: #1E88E5; --shadow: 0 8px 24px rgba(25, 118, 210, 0.1); --date-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+  [data-theme="lavender"] { --bg: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%); --surface: #FFFFFF; --surface-rgb: 255, 255, 255; --primary: #8E24AA; --text-main: #4A148C; --text-muted: #9C27B0; --shadow: 0 8px 24px rgba(142, 36, 170, 0.1); --date-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+  
+  /* NEW 5 THEMES */
+  [data-theme="amethyst"] { --bg: linear-gradient(135deg, #2E1065 0%, #4C1D95 100%); --surface: #3B0764; --surface-rgb: 59, 7, 100; --primary: #D8B4FE; --text-main: #F3E8FF; --text-muted: #A855F7; --shadow: 0 8px 24px rgba(0,0,0,0.5); --date-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  [data-theme="coffee"] { --bg: linear-gradient(135deg, #3E2723 0%, #4E342E 100%); --surface: #5D4037; --surface-rgb: 93, 64, 55; --primary: #FFAB91; --text-main: #EFEBE9; --text-muted: #BCAAA4; --shadow: 0 8px 24px rgba(0,0,0,0.4); --date-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  [data-theme="cherry"] { --bg: linear-gradient(135deg, #7F1D1D 0%, #991B1B 100%); --surface: #450A0A; --surface-rgb: 69, 10, 10; --primary: #FCA5A5; --text-main: #FEF2F2; --text-muted: #F87171; --shadow: 0 8px 24px rgba(0,0,0,0.5); --date-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  [data-theme="slate"] { --bg: linear-gradient(135deg, #1E293B 0%, #334155 100%); --surface: #0F172A; --surface-rgb: 15, 23, 42; --primary: #38BDF8; --text-main: #F1F5F9; --text-muted: #94A3B8; --shadow: 0 8px 24px rgba(0,0,0,0.4); --date-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  [data-theme="peacock"] { --bg: linear-gradient(135deg, #042F2E 0%, #134E4A 100%); --surface: #115E59; --surface-rgb: 17, 94, 89; --primary: #5EEAD4; --text-main: #CCFBF1; --text-muted: #2DD4BF; --shadow: 0 8px 24px rgba(0,0,0,0.5); --date-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Mukta', sans-serif; -webkit-tap-highlight-color: transparent; }
+  body { background: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; transition: background 0.4s; padding-bottom: 20px; }
+
+  /* --- HEADER --- */
+  .header { padding: 20px 20px 15px; display: flex; justify-content: space-between; align-items: center; }
+  .header h1 { font-family: 'Tiro Devanagari Marathi', serif; font-size: 1.8rem; font-weight: 800; color: var(--primary); letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  .theme-btn { background: rgba(var(--surface-rgb), 0.6); backdrop-filter: blur(10px); border: 1px solid var(--primary); color: var(--primary); padding: 8px 16px; border-radius: 24px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: var(--date-shadow); }
+  .theme-btn:active { transform: scale(0.95); }
+
+  /* --- MAIN CARD --- */
+  .main-card { margin: 0 15px 20px; background: var(--surface); border-radius: 24px; box-shadow: var(--shadow); padding: 20px; position: relative; overflow: hidden; }
+  .main-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: linear-gradient(90deg, var(--primary), transparent); opacity: 0.5; }
+
+  /* --- MONTH SELECTOR --- */
+  .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+  .cal-month { font-size: 1.4rem; font-weight: 800; color: var(--text-main); }
+  .cal-nav { display: flex; gap: 12px; }
+  .cal-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(var(--surface-rgb), 0.5); color: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 1.4rem; font-weight: bold; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+  .cal-btn:active { background: var(--primary); color: var(--surface); }
+
+  /* --- LIVE CLOCK --- */
+  .clock-container { text-align: center; padding: 10px 0 20px; border-bottom: 1px dashed rgba(0,0,0,0.1); margin-bottom: 15px; }
+  .live-clock { font-size: 3.5rem; font-weight: 800; color: var(--primary); line-height: 1; font-variant-numeric: tabular-nums; text-shadow: 0 4px 15px rgba(var(--surface-rgb), 0.1); }
+  .live-clock span { font-size: 1.5rem; color: var(--text-muted); font-weight: 700; }
+  .live-date { font-size: 1.1rem; font-weight: 700; color: var(--text-muted); margin-top: 8px; }
+
+  /* --- CALENDAR GRID --- */
+  .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 0.85rem; font-weight: 800; color: var(--text-muted); margin-bottom: 10px; }
+  .weekdays div:first-child { color: #D32F2F; }
+  
+  .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  .day { 
+    aspect-ratio: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; 
+    border-radius: 14px; font-size: 1.2rem; font-weight: 700; position: relative; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--surface); box-shadow: var(--date-shadow); border: 1px solid rgba(0,0,0,0.03);
+    font-family: 'Tiro Devanagari Marathi', serif;
+  }
+  .day:active { transform: scale(0.9); }
+  .day.empty { visibility: hidden; background: transparent; box-shadow: none; border: none; }
+  .day.today { border: 2px solid var(--primary); color: var(--primary); background: rgba(var(--surface-rgb), 0.9); box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+  
+  /* --- POP-OUT HOLIDAYS --- */
+  .day.holiday { 
+    color: #fff; 
+    background: linear-gradient(135deg, #FF5252, #D32F2F); 
+    font-weight: 900; 
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+    border: none;
+    transform: translateY(-2px);
+    animation: pulse-holiday 2s infinite;
+  }
+  .day.holiday::after { 
+    content: '🌟'; position: absolute; top: -5px; right: -5px; font-size: 0.7rem; 
+    background: #FFD700; border-radius: 50%; width: 14px; height: 14px; display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  }
+  @keyframes pulse-holiday {
+    0% { box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4); }
+    50% { box-shadow: 0 4px 25px rgba(211, 47, 47, 0.8); }
+    100% { box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4); }
+  }
+
+  .day.selected { transform: scale(1.15) translateY(-4px); background: var(--primary); color: var(--surface); box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 2; border-color: transparent; }
+  .day.selected.holiday { background: linear-gradient(135deg, #D32F2F, #B71C1C); color: white; }
+
+  /* --- QUOTE BOX --- */
+  .quote-box { background: rgba(var(--surface-rgb), 0.6); backdrop-filter: blur(10px); margin: 0 15px 20px; padding: 18px; border-radius: 20px; box-shadow: var(--shadow); border-left: 5px solid var(--primary); text-align: center; transition: opacity 0.5s; }
+  .quote-text { font-size: 1rem; font-weight: 600; color: var(--text-main); font-style: italic; line-height: 1.5; }
+  .quote-author { font-size: 0.85rem; font-weight: 800; color: var(--primary); margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* --- BRANDING (DYNAMIC COLOR) --- */
+  .branding { text-align: center; padding: 10px 0 20px; font-size: 1rem; font-weight: 700; letter-spacing: 0.5px; color: var(--text-muted); }
+  .branding strong { color: var(--primary); font-weight: 800; font-size: 1.1rem; }
+
+  /* --- MODALS --- */
+  .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 100; display: none; justify-content: center; align-items: flex-end; opacity: 0; transition: opacity 0.3s; }
+  .modal-overlay.active { display: flex; opacity: 1; }
+  .modal-content { background: var(--surface); width: 100%; max-height: 85vh; border-radius: 28px 28px 0 0; padding: 20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; }
+  .modal-overlay.active .modal-content { transform: translateY(0); }
+  .drag-handle { width: 50px; height: 6px; background: var(--text-muted); border-radius: 4px; margin: 0 auto 20px; opacity: 0.3; cursor: pointer; }
+  
+  .modal-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 20px; color: var(--text-main); text-align: center; font-family: 'Tiro Devanagari Marathi', serif; }
+  
+  .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding-bottom: 20px; }
+  .theme-item { padding: 12px; border-radius: 14px; border: 2px solid transparent; text-align: center; cursor: pointer; font-weight: 800; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.5); transition: 0.2s; }
+  .theme-item:active { transform: scale(0.95); }
+  .theme-item.active { border-color: var(--text-main); box-shadow: 0 0 15px rgba(0,0,0,0.3); }
+  
+  .info-date { font-size: 1.3rem; font-weight: 800; color: var(--primary); margin-bottom: 12px; border-bottom: 2px dashed rgba(0,0,0,0.1); padding-bottom: 12px; font-family: 'Tiro Devanagari Marathi', serif; }
+  .info-content { font-size: 1.1rem; font-weight: 600; color: var(--text-main); line-height: 1.6; }
+</style>
+</head>
+<body data-theme="kesar">
+
+  <div class="header">
+    <h1>मराठी दिनदर्शिका</h1>
+    <button class="theme-btn" onclick="openThemeModal()">🎨 थीम</button>
+  </div>
+
+  <div class="main-card">
+    <div class="cal-header">
+      <div class="cal-month" id="cal-month-year">ऑक्टोबर २०२६</div>
+      <div class="cal-nav">
+        <div class="cal-btn" onclick="changeMonth(-1)">‹</div>
+        <div class="cal-btn" onclick="changeMonth(1)">›</div>
+      </div>
+    </div>
+
+    <div class="clock-container">
+      <div class="live-clock" id="liveClock">१०:४२<span>००</span></div>
+      <div class="live-date" id="liveDate">सोमवार, २६ ऑक्टोबर २०२६</div>
+    </div>
+
+    <div class="weekdays">
+      <div>रवि</div><div>सोम</div><div>मंगळ</div><div>बुध</div><div>गुरु</div><div>शुक्र</div><div>शनि</div>
+    </div>
+    <div class="days-grid" id="days-grid"></div>
+  </div>
+
+  <div class="quote-box" id="quoteBox">
+    <div class="quote-text" id="quoteText">सुविचार लोड होत आहे...</div>
+    <div class="quote-author" id="quoteAuthor">- मराठी सुविचार</div>
+  </div>
+
+  <!-- BRANDING -->
+  <div class="branding">
+    soloDS - <strong>सुशांत कदम</strong>
+  </div>
+
+  <!-- THEME MODAL -->
+  <div class="modal-overlay" id="themeModal" onclick="closeThemeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="drag-handle" onclick="closeThemeModal()"></div>
+      <div class="modal-title">थीम निवडा</div>
+      <div class="theme-grid" id="themeGrid"></div>
+    </div>
+  </div>
+
+  <!-- INFO MODAL -->
+  <div class="modal-overlay" id="infoModal" onclick="closeInfoModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="drag-handle" onclick="closeInfoModal()"></div>
+      <div class="info-date" id="infoDateTitle">तारीख</div>
+      <div class="info-content" id="infoContent">माहिती</div>
+    </div>
+  </div>
+
+<script>
+  // --- MARATHI NUMERALS CONVERTER ---
+  function toMarathiDigits(num) {
+    const marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+    return num.toString().replace(/\d/g, d => marathiDigits[d]);
+  }
+
+  // --- DATA ---
+  const monthsMarathi = ["जानेवारी", "फेब्रुवारी", "मार्च", "एप्रिल", "मे", "जून", "जुलै", "ऑगस्ट", "सप्टेंबर", "ऑक्टोबर", "नोव्हेंबर", "डिसेंबर"];
+  const daysMarathi = ["रविवार", "सोमवार", "मंगळवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
+
+  const holidays = {
+    "2026-01-01": "इंग्रजी नववर्ष",
+    "2026-01-14": "मकर संक्रांती",
+    "2026-01-26": "प्रजासत्ताक दिन",
+    "2026-03-03": "होळी (धुलिवंदन)",
+    "2026-03-21": "ईद-उल-फित्र",
+    "2026-04-14": "डॉ. बाबासाहेब आंबेडकर जयंती",
+    "2026-05-01": "महाराष्ट्र दिन",
+    "2026-08-15": "स्वातंत्र्य दिन",
+    "2026-08-28": "रक्षाबंधन",
+    "2026-09-05": "श्रीकृष्ण जन्माष्टमी",
+    "2026-09-14": "गणेश चतुर्थी",
+    "2026-10-02": "महात्मा गांधी जयंती",
+    "2026-10-20": "दसरा (विजयादशमी)",
+    "2026-11-08": "दिवाळी (लक्ष्मीपूजन)",
+    "2026-11-10": "भाऊबीज",
+    "2026-11-24": "गुरु नानक जयंती",
+    "2026-12-25": "ख्रिसमस"
+  };
+
+  const themesList = [
+    { id: 'kesar', name: 'केशरी', color: 'linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%)' },
+    { id: 'midnight', name: 'मिडनाइट', color: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)' },
+    { id: 'forest', name: 'हिरवा', color: 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)' },
+    { id: 'ocean', name: 'समुद्र', color: 'linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 100%)' },
+    { id: 'rose', name: 'गुलाबी', color: 'linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%)' },
+    { id: 'royal', name: 'रॉयल', color: 'linear-gradient(135deg, #311B92 0%, #4527A0 100%)' },
+    { id: 'flat-white', name: 'पांढरा', color: '#F8F9FA' },
+    { id: 'flat-dark', name: 'काळा', color: '#121212' },
+    { id: 'sunset', name: 'सूर्यास्त', color: 'linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%)' },
+    { id: 'cyber', name: 'सायबर', color: '#000000' },
+    { id: 'gold', name: 'सोनेरी', color: 'linear-gradient(135deg, #1A1A1A 0%, #000000 100%)' },
+    { id: 'sky', name: 'आकाश', color: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)' },
+    { id: 'lavender', name: 'जांभळा', color: 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)' },
+    { id: 'amethyst', name: 'अ‍ॅमेथिस्ट', color: 'linear-gradient(135deg, #2E1065 0%, #4C1D95 100%)' },
+    { id: 'coffee', name: 'कॉफी', color: 'linear-gradient(135deg, #3E2723 0%, #4E342E 100%)' },
+    { id: 'cherry', name: 'चेरी', color: 'linear-gradient(135deg, #7F1D1D 0%, #991B1B 100%)' },
+    { id: 'slate', name: 'स्लेट', color: 'linear-gradient(135deg, #1E293B 0%, #334155 100%)' },
+    { id: 'peacock', name: 'मोरपंखी', color: 'linear-gradient(135deg, #042F2E 0%, #134E4A 100%)' }
+  ];
+
+  const marathiQuotes = [
+    { text: "यशाची गुरुकिल्ली म्हणजे सातत्य.", author: "ए. पी. जे. अब्दुल कलाम" },
+    { text: "तुमचे विचारच तुमचे जीवन घडवतात.", author: "स्वामी विवेकानंद" },
+    { text: "जो जिंकू शकतो असा विश्वास असेल तर तुम्ही अर्धी लढाई जिंकली आहे.", author: "थिओडोर रुझवेल्ट" },
+    { text: "कठीण प्रसंगातूनच माणूस घडतो.", author: "मराठी सुविचार" },
+    { text: "ज्ञान ही सर्वात मोठी संपत्ती आहे.", author: "चाणक्य" },
+    { text: "मेहनत कधीही वाया जात नाही.", author: "मराठी सुविचार" },
+    { text: "स्वतःवर विश्वास ठेवा, बाकी सर्व आपोआप होईल.", author: "स्वामी विवेकानंद" },
+    { text: "सतत प्रयत्न करणारा कधीच हरत नाही.", author: "मराठी सुविचार" },
+    { text: "वेळ हा पैशापेक्षा मौल्यवान आहे.", author: "मराठी सुविचार" }
+  ];
+
+  // --- STATE ---
+  const today = new Date();
+  let currentMonth = today.getMonth();
+  let currentYear = today.getFullYear();
+  let selectedDateStr = formatDateToStr(today);
+
+  // --- CLOCK ENGINE ---
+  function updateClock() {
+    const now = new Date();
+    let h = now.getHours();
+    let m = now.getMinutes();
+    let s = now.getSeconds();
+    
+    let displayH = h % 12 || 12;
+    let displayM = m < 10 ? '0' + m : m;
+    let displayS = s < 10 ? '0' + s : s;
+    
+    document.getElementById('liveClock').innerHTML = `${toMarathiDigits(displayH)}:${toMarathiDigits(displayM)}<span>${toMarathiDigits(displayS)}</span>`;
+    
+    let dayName = daysMarathi[now.getDay()];
+    let monthName = monthsMarathi[now.getMonth()];
+    document.getElementById('liveDate').innerText = `${dayName}, ${toMarathiDigits(now.getDate())} ${monthName} ${toMarathiDigits(now.getFullYear())}`;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // --- CALENDAR ENGINE ---
+  function formatDateToStr(d) {
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    let year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
+  }
+
+  function renderCalendar() {
+    document.getElementById('cal-month-year').innerText = `${monthsMarathi[currentMonth]} ${toMarathiDigits(currentYear)}`;
+    
+    const grid = document.getElementById('days-grid');
+    grid.innerHTML = '';
+    
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    
+    for (let i = 0; i < firstDay; i++) {
+      grid.innerHTML += `<div class="day empty"></div>`;
+    }
+    
+    for (let i = 1; i <= daysInMonth; i++) {
+      let cellDate = new Date(currentYear, currentMonth, i);
+      let dateStr = formatDateToStr(cellDate);
+      
+      let classes = 'day';
+      if (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) classes += ' today';
+      if (dateStr === selectedDateStr) classes += ' selected';
+      if (holidays[dateStr]) classes += ' holiday';
+      
+      grid.innerHTML += `<div class="${classes}" onclick="selectDate(${i}, '${dateStr}')">${toMarathiDigits(i)}</div>`;
+    }
+  }
+
+  function changeMonth(dir) {
+    currentMonth += dir;
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    renderCalendar();
+  }
+
+  function selectDate(dayNum, dateStr) {
+    selectedDateStr = dateStr;
+    renderCalendar();
+    
+    let d = new Date(currentYear, currentMonth, dayNum);
+    let dayName = daysMarathi[d.getDay()];
+    let monthName = monthsMarathi[currentMonth];
+    
+    document.getElementById('infoDateTitle').innerText = `${dayName}, ${toMarathiDigits(dayNum)} ${monthName}`;
+    
+    let content = document.getElementById('infoContent');
+    if (holidays[dateStr]) {
+      content.innerHTML = `<span style="color: #D32F2F; font-weight: 800; font-size: 1.2rem;">🌟 ${holidays[dateStr]}</span>`;
+    } else {
+      content.innerHTML = `<span style="color: var(--text-muted);">या दिवशी कोणतीही मोठी सुट्टी नाही.</span>`;
+    }
+    
+    document.getElementById('infoModal').classList.add('active');
+  }
+
+  // --- SWIPE ENGINE ---
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const wrap = document.querySelector('.main-card');
+
+  wrap.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  wrap.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, { passive: true });
+
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    if (touchEndX < touchStartX - swipeThreshold) changeMonth(1);
+    if (touchEndX > touchStartX + swipeThreshold) changeMonth(-1);
+  }
+
+  // --- THEME ENGINE ---
+  function buildThemeGrid() {
+    const grid = document.getElementById('themeGrid');
+    grid.innerHTML = '';
+    themesList.forEach((t) => {
+      let isActive = document.body.getAttribute('data-theme') === t.id;
+      grid.innerHTML += `<div class="theme-item ${isActive ? 'active' : ''}" style="background: ${t.color};" onclick="setTheme('${t.id}', this)">${t.name}</div>`;
+    });
+  }
+
+  function setTheme(themeId, el) {
+    document.body.setAttribute('data-theme', themeId);
+    document.querySelectorAll('.theme-item').forEach(item => item.classList.remove('active'));
+    el.classList.add('active');
+    closeThemeModal();
+  }
+
+  function openThemeModal() { 
+    buildThemeGrid();
+    document.getElementById('themeModal').classList.add('active'); 
+  }
+  function closeThemeModal(e) {
+    if (!e || e.target.id === 'themeModal' || e.target.classList.contains('drag-handle')) {
+      document.getElementById('themeModal').classList.remove('active');
+    }
+  }
+
+  function closeInfoModal(e) {
+    if (!e || e.target.id === 'infoModal' || e.target.classList.contains('drag-handle')) {
+      document.getElementById('infoModal').classList.remove('active');
+    }
+  }
+
+  // --- LIVE QUOTE ENGINE ---
+  function showRandomMarathiQuote() {
+    const box = document.getElementById('quoteBox');
+    box.style.opacity = 0; 
+    
+    setTimeout(() => {
+      const randomIndex = Math.floor(Math.random() * marathiQuotes.length);
+      const quote = marathiQuotes[randomIndex];
+      document.getElementById('quoteText').innerText = `"${quote.text}"`;
+      document.getElementById('quoteAuthor').innerText = `- ${quote.author}`;
+      box.style.opacity = 1; 
+    }, 500);
+  }
+
+  setInterval(showRandomMarathiQuote, 5000);
+
+  // --- INIT ---
+  renderCalendar();
+</script>
+</body>
+</html>
