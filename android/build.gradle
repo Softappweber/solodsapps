@@ -1,10 +1,2 @@
-plugins {
-    id 'com.android.application' version '8.2.0' apply false
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+// Root build.gradle - plugin versions are managed in settings.gradle
+// The app module applies the plugins directly
